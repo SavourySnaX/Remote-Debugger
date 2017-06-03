@@ -35,6 +35,7 @@
             this.newDisassemblyViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newLogViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newScreenViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newBreakpointsViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,7 +43,7 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.newBreakpointsViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newSpriteViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +67,8 @@
             this.newDisassemblyViewToolStripMenuItem,
             this.newLogViewToolStripMenuItem,
             this.newScreenViewToolStripMenuItem,
-            this.newBreakpointsViewToolStripMenuItem});
+            this.newBreakpointsViewToolStripMenuItem,
+            this.newSpriteViewToolStripMenuItem});
             this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
             this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.windowToolStripMenuItem.Text = "&Window";
@@ -98,6 +100,13 @@
             this.newScreenViewToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
             this.newScreenViewToolStripMenuItem.Text = "New &Screen View";
             this.newScreenViewToolStripMenuItem.Click += new System.EventHandler(this.newScreenViewToolStripMenuItem_Click);
+            // 
+            // newBreakpointsViewToolStripMenuItem
+            // 
+            this.newBreakpointsViewToolStripMenuItem.Name = "newBreakpointsViewToolStripMenuItem";
+            this.newBreakpointsViewToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.newBreakpointsViewToolStripMenuItem.Text = "New Breakpoints View";
+            this.newBreakpointsViewToolStripMenuItem.Click += new System.EventHandler(this.newBreakpointsViewToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -148,12 +157,12 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // newBreakpointsViewToolStripMenuItem
+            // newSpriteViewToolStripMenuItem
             // 
-            this.newBreakpointsViewToolStripMenuItem.Name = "newBreakpointsViewToolStripMenuItem";
-            this.newBreakpointsViewToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.newBreakpointsViewToolStripMenuItem.Text = "New Breakpoints View";
-            this.newBreakpointsViewToolStripMenuItem.Click += new System.EventHandler(this.newBreakpointsViewToolStripMenuItem_Click);
+            this.newSpriteViewToolStripMenuItem.Name = "newSpriteViewToolStripMenuItem";
+            this.newSpriteViewToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.newSpriteViewToolStripMenuItem.Text = "New Sprite View";
+            this.newSpriteViewToolStripMenuItem.Click += new System.EventHandler(this.newSpriteViewToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -194,6 +203,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newBreakpointsViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newSpriteViewToolStripMenuItem;
     }
 }
 

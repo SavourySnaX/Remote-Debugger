@@ -132,6 +132,12 @@
     <Compile Include="Dialogs\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Docks\SpriteView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docks\SpriteView.Designer.cs">
+      <DependentUpon>SpriteView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Docks\Breakpoint.resx">
       <DependentUpon>Breakpoint.cs</DependentUpon>
     </EmbeddedResource>
@@ -170,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Docks\SpectrumScreen.resx">
       <DependentUpon>SpectrumScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Docks\SpriteView.resx">
+      <DependentUpon>SpriteView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="VSFiles\packages.config" />

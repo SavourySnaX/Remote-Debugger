@@ -40,6 +40,7 @@ namespace RemoteDebugger
         Disassembly myDisassembly;
         SpectrumScreen myScreen;
         Breakpoint myBreakpoints;
+        SpriteView mySpriteView;
 
         bool refreshScreen;
 
@@ -66,6 +67,7 @@ namespace RemoteDebugger
                 myDisassembly = new Disassembly("Disassembly", "Disassembly");
                 myScreen = new SpectrumScreen("Screen", "Screen");
                 myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
+                mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
 
                 myButtonBar.Show(this.dockPanel, DockState.DockTop);
                 myNewRegisters.Show(this.dockPanel, DockState.DockLeft);
@@ -73,6 +75,7 @@ namespace RemoteDebugger
                 myLog.Show(this.dockPanel, DockState.DockBottom);
                 myBreakpoints.Show(this.dockPanel, DockState.DockLeft);
                 myScreen.Show(this.dockPanel, DockState.DockRight);
+                mySpriteView.Show(this.dockPanel, DockState.Float);
             }
 
             Program.telnetConnection.SendCommand("help", null);
@@ -121,6 +124,12 @@ namespace RemoteDebugger
                         myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
                     }
                     return myBreakpoints;
+                case "SpritePatterns":
+                    if (mySpriteView == null)
+                    {
+                        mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
+                    }
+                    return mySpriteView;
                 default:
                     break;
             }
@@ -183,6 +192,10 @@ namespace RemoteDebugger
                         address = myNewRegisters.GetRegisterValue("PC") + "H";
                     }
                     myDisassembly.RequestUpdate(address);
+                }
+                if (mySpriteView!=null)
+                {
+                    mySpriteView.RequestUpdate();
                 }
                 if (myScreen!=null)
                 {
@@ -251,6 +264,15 @@ namespace RemoteDebugger
             {
                 myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
                 myBreakpoints.Show(dockPanel, DockState.Float);
+            }
+        }
+
+        private void newSpriteViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mySpriteView == null)
+            {
+                mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
+                mySpriteView.Show(dockPanel, DockState.Float);
             }
         }
     }
