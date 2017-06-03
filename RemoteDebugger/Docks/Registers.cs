@@ -126,13 +126,20 @@ namespace RemoteDebugger
 
         void Callback(string[] response)
         {
-            if (InvokeRequired)
+            try
             {
-                Invoke((MethodInvoker)delegate { UIUpdate(response); });
+                if (InvokeRequired)
+                {
+                    Invoke((MethodInvoker)delegate { UIUpdate(response); });
+                }
+                else
+                {
+                    UIUpdate(response);
+                }
             }
-            else
+            catch
             {
-                UIUpdate(response);
+
             }
         }
     }
