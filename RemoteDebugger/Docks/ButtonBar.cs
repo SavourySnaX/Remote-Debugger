@@ -99,17 +99,23 @@ namespace RemoteDebugger
 
         private void clickPause(object sender, EventArgs e)
         {
-            Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
-            Program.InStepMode = true;
+            if (Program.InStepMode)
+            {
+                Program.telnetConnection.SendCommand("exit-cpu-step", commandResponse);
+                Program.InStepMode = false;
+                buttonPause.Text = "Pause";
+            }
+            else
+            {
+                Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
+                Program.InStepMode = true;
+                buttonPause.Text = "Resume";
+            }
         }
 
         private void ButtonBar_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
         }
 
         private void clickStepOver(object sender, EventArgs e)
@@ -119,8 +125,7 @@ namespace RemoteDebugger
 
         private void clickRun(object sender, EventArgs e)
         {
-            Program.telnetConnection.SendCommand("exit-cpu-step", commandResponse);
-            Program.InStepMode = false;
+            Program.telnetConnection.SendCommand("run", commandResponse);
         }
 
         private void clickLoadCode(object sender, EventArgs e)
