@@ -71,7 +71,7 @@ namespace RemoteDebugger
                 myNewRegisters.Show(this.dockPanel, DockState.DockLeft);
                 myDisassembly.Show(this.dockPanel, DockState.DockRight);
                 myLog.Show(this.dockPanel, DockState.DockBottom);
-                myBreakpoints.Show(this.dockPanel, DockState.DockBottom);
+                myBreakpoints.Show(this.dockPanel, DockState.DockLeft);
                 myScreen.Show(this.dockPanel, DockState.DockRight);
             }
 
