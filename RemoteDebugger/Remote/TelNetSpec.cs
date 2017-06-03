@@ -44,14 +44,16 @@ namespace RemoteDebugger
         public ConcurrentQueue<string> messages;
         TcpClient c;
         NetworkStream s;
-        public TelNetSpec(int port)
+        public bool connected;
+        int port;
+
+        public TelNetSpec(int iport)
         {
+            port = iport;
+            connected = false;
             messages = new ConcurrentQueue<string>();
             commands = new ConcurrentQueue<Command>();
-            c = new TcpClient("localhost", port);
 
-            s = c.GetStream();
-            s.ReadTimeout = 50;
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
@@ -61,9 +63,12 @@ namespace RemoteDebugger
 
         public void CloseConnection()
         {
-            ImmediateCommand("quit\n");
-            s.Close();
-            c.Close();
+            if (connected)
+            {
+                ImmediateCommand("quit\n");
+                s.Close();
+                c.Close();
+            }
         }
         void ImmediateCommand(string command)
         {
@@ -94,6 +99,35 @@ namespace RemoteDebugger
             string message = "";
             while (true)
             {
+                if (connected == false)
+                {
+                    try
+                    {
+                        Thread.Sleep(1000);
+                        c = new TcpClient("localhost", port);
+
+                        s = c.GetStream();
+                        s.ReadTimeout = 50;
+                        connected = true;
+                    }
+                    catch
+                    {
+                        if (s != null)
+                        {
+                            s.Close();
+                            s = null;
+                            c.Close();
+                            c = null;
+                        }
+                        if (c != null)
+                        {
+                            c.Close();
+                            c = null;
+                        }
+                        connected = false;
+                    }
+                    continue;
+                }
                 int r = -1;
                 try
                 {

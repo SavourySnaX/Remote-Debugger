@@ -50,6 +50,8 @@ namespace RemoteDebugger
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Controls.Add(this.dockPanel);
 
+            toolStripStatusLabel1.Text = "Please launch ZEsarUX with --enable-remoteprotocol";
+
             if (File.Exists("layout.xml"))
             {
                 dockPanel.LoadFromXml("layout.xml",DelegateHandler);
@@ -136,6 +138,16 @@ namespace RemoteDebugger
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (Program.t.connected)
+            {
+                toolStripStatusLabel1.Text = "Connected";
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "Please launch ZEsarUX with --enable-remoteprotocol";
+                return;
+            }
+
             if (Program.t.IsQueueEmpty())
             {
                 if (myNewRegisters != null)
