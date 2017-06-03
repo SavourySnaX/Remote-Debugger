@@ -39,6 +39,8 @@ namespace RemoteDebugger
         Registers myNewRegisters;
         Disassembly myDisassembly;
         SpectrumScreen myScreen;
+        Breakpoint myBreakpoints;
+
         bool refreshScreen;
 
         public MainForm()
@@ -63,10 +65,13 @@ namespace RemoteDebugger
                 myNewRegisters = new Registers("Registers", "Registers");
                 myDisassembly = new Disassembly("Disassembly", "Disassembly");
                 myScreen = new SpectrumScreen("Screen", "Screen");
+                myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
+
                 myButtonBar.Show(this.dockPanel, DockState.DockTop);
                 myNewRegisters.Show(this.dockPanel, DockState.DockLeft);
                 myDisassembly.Show(this.dockPanel, DockState.DockRight);
                 myLog.Show(this.dockPanel, DockState.DockBottom);
+                myBreakpoints.Show(this.dockPanel, DockState.DockBottom);
                 myScreen.Show(this.dockPanel, DockState.DockRight);
             }
 
@@ -110,6 +115,12 @@ namespace RemoteDebugger
                         myScreen = new SpectrumScreen("Screen", "Screen");
                     }
                     return myScreen;
+                case "Breakpoints":
+                    if (myBreakpoints == null)
+                    {
+                        myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
+                    }
+                    return myBreakpoints;
                 default:
                     break;
             }
@@ -159,6 +170,10 @@ namespace RemoteDebugger
                 if (myNewRegisters != null)
                 {
                     myNewRegisters.RequestUpdate();
+                }
+                if (myBreakpoints != null)
+                {
+                    myBreakpoints.RequestUpdate();
                 }
                 if (myDisassembly != null)
                 {
@@ -227,6 +242,15 @@ namespace RemoteDebugger
             using (Settings settings = new Settings())
             {
                 settings.ShowDialog(this);
+            }
+        }
+
+        private void newBreakpointsViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (myBreakpoints == null)
+            {
+                myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
+                myBreakpoints.Show(dockPanel, DockState.Float);
             }
         }
     }

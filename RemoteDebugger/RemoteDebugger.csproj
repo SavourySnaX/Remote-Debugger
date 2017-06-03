@@ -69,6 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Docks\Breakpoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Docks\Breakpoint.Designer.cs">
+      <DependentUpon>Breakpoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     <Compile Include="Dialogs\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Docks\Breakpoint.resx">
+      <DependentUpon>Breakpoint.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
