@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace RemoteDebugger
@@ -97,20 +98,27 @@ namespace RemoteDebugger
             Program.telnetConnection.SendCommand("cpu-step", commandResponse);
         }
 
-        private void clickPause(object sender, EventArgs e)
+        public void SwapMode(bool pause)
         {
-            if (Program.InStepMode)
+            if (Program.InStepMode && !pause)
             {
+                Program.telnetConnection.SendCommand("disable-breakpoints", commandResponse);
                 Program.telnetConnection.SendCommand("exit-cpu-step", commandResponse);
                 Program.InStepMode = false;
                 buttonPause.Text = "Pause";
             }
-            else
+            if (!Program.InStepMode && pause)
             {
                 Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
+                Program.telnetConnection.SendCommand("enable-breakpoints", commandResponse);
                 Program.InStepMode = true;
                 buttonPause.Text = "Resume";
             }
+        }
+
+        private void clickPause(object sender, EventArgs e)
+        {
+            SwapMode(!Program.InStepMode);
         }
 
         private void ButtonBar_Load(object sender, EventArgs e)

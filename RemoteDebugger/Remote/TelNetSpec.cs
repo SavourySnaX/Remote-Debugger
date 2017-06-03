@@ -148,6 +148,10 @@ namespace RemoteDebugger
                 {
                     r = s.ReadByte();
                 }
+                catch (System.NullReferenceException)
+                {
+                    continue;
+                }
                 catch (System.ObjectDisposedException)
                 {
                     continue;

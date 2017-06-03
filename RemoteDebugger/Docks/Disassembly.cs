@@ -24,6 +24,7 @@ SOFTWARE.
 
 */
 
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -80,6 +81,17 @@ namespace RemoteDebugger
             }
             if (updated)
             {
+                for (int a=0;a<disassemblyData.Count();a++)
+                {
+                    if (Program.IsBreakpoint(Convert.ToInt32(disassemblyData[a].Address, 16)))
+                    {
+                        dataGridView1.Rows[a].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+                    }
+                    else
+                    { 
+                        dataGridView1.Rows[a].DefaultCellStyle.BackColor = System.Drawing.Color.White;
+                    }
+                }
                 dataGridView1.Invalidate(true);
             }
 
@@ -101,6 +113,19 @@ namespace RemoteDebugger
             catch
             {
                 
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int address = Convert.ToInt32(disassemblyData[e.RowIndex].Address, 16);
+            if (Program.IsBreakpoint(address))
+            {
+                Program.RemoveBreakpoint(address);
+            }
+            else
+            {
+                Program.AddBreakpoint(address);
             }
         }
     }

@@ -24,21 +24,99 @@ SOFTWARE.
 
 */
 using System;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace RemoteDebugger
 {
     static class Program
     {
+        static readonly int BreakpointCount=10;
+
         public static TelNetSpec telnetConnection=new TelNetSpec();
         public static bool InStepMode = false;
+        public static BindingList<BreakpointData> breakpointData;
+        static Regex pcBreakRegex;
 
+        static void InitialiseBreakpointData()
+        {
+            pcBreakRegex = new Regex(@"PC\s*=\s*([0-9]*[^a-fA-FHh]$|[0-9a-fA-F]*[Hh]$)");
+            breakpointData = new BindingList<BreakpointData>();
+            for (int a=0;a<BreakpointCount;a++)
+            {
+                breakpointData.Add(new BreakpointData() { IsEnabled=false, Condition = "" });
+            }
+        }
+
+        public static int FindEmptyBreakpoint()
+        {
+            for (int a=0;a<BreakpointCount;a++)
+            {
+                if (breakpointData[a].Condition == "None")
+                    return a;
+            }
+            return -1;
+        }
+
+        public static int FindBreakpoint(int address)
+        {
+            for (int a=0;a<BreakpointCount;a++)
+            {
+                if (breakpointData[a].IsEnabled)
+                {
+                    Match m = pcBreakRegex.Match(breakpointData[a].Condition);
+                    if (m.Success)
+                    {
+                        string sAddress = m.Groups[1].Value;
+                        if (sAddress.EndsWith("H") || sAddress.EndsWith("h"))
+                        {
+                            sAddress=sAddress.Remove(sAddress.Length-1);
+                            int decAddress = Convert.ToInt32(sAddress, 16);
+                            if (address == decAddress)
+                                return a;
+                        }
+                        else
+                        {
+                            if (address == Convert.ToInt32(sAddress, 10))
+                                return a;
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
+
+        public static void RemoveBreakpoint(int address)
+        {
+            int bp = FindBreakpoint(address);
+            if (bp!=-1)
+            {
+                telnetConnection.SendCommand("set-breakpoint " + (bp + 1), null);
+                telnetConnection.SendCommand("disable-breakpoint " + (bp + 1),null);
+            }
+        }
+
+        public static void AddBreakpoint(int address)
+        {
+            int bp = FindEmptyBreakpoint();
+            if (bp!=-1)
+            {
+                telnetConnection.SendCommand("set-breakpoint " + (bp + 1) + " PC=" + address, null);
+            }
+        }
+
+        public static bool IsBreakpoint(int address)
+        {
+            return FindBreakpoint(address) != -1;
+        }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            InitialiseBreakpointData();
             telnetConnection.UpdateSettings(Properties.Settings.Default.remoteAddress, Properties.Settings.Default.remotePort);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

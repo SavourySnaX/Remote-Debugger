@@ -33,7 +33,6 @@ namespace RemoteDebugger
 {
     public partial class Breakpoint : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        BindingList<BreakpointData> breakpointData;
         Regex breakRegex;
         string viewName;
 
@@ -41,14 +40,9 @@ namespace RemoteDebugger
         {
             viewName = viewname;
             InitializeComponent();
-            breakpointData = new BindingList<BreakpointData>();
-            breakRegex = new Regex(@"(Enabled|Disabled)\s*[0-9]+:\s*(.*)");
-            for (int a=0;a<10;a++)
-            {
-                breakpointData.Add(new BreakpointData() { IsEnabled=false, Condition = "" });
-            }
 
-            dataGridView1.DataSource = breakpointData;
+            breakRegex = new Regex(@"(Enabled|Disabled)\s*[0-9]+:\s*(.*)");
+            dataGridView1.DataSource = Program.breakpointData;
 
             dataGridView1.Columns[0].ReadOnly = true;
             dataGridView1.Columns[1].ReadOnly = false;
@@ -70,13 +64,13 @@ namespace RemoteDebugger
         {
             bool updated = false;
             items = items.Skip(1).ToArray();    // Skip first line
-            for (int a=0;a<items.Count() && a<breakpointData.Count();a++)
+            for (int a=0;a<items.Count() && a<Program.breakpointData.Count();a++)
             {
                 Match m = breakRegex.Match(items[a]);
                 if (m.Success)
                 {
-                    breakpointData[a].IsEnabled = m.Groups[1].Value=="Enabled";
-                    breakpointData[a].Condition = m.Groups[2].Value;
+                    Program.breakpointData[a].IsEnabled = m.Groups[1].Value=="Enabled";
+                    Program.breakpointData[a].Condition = m.Groups[2].Value;
                     updated = true;
                 }
             }

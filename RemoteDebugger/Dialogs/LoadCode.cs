@@ -31,6 +31,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -83,8 +84,21 @@ namespace RemoteDebugger
             fileName.Text = FileRequester(path, "bin files (*.bin)|*.bin|All files (*.*)|*.*");
         }
 
+        void NoResponse(string[] response)
+        {
+
+        }
+
         void LoadResponse(string[] data)
         {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate { Close(); });
+            }
+            else
+            {
+                Close();
+            }
         }
 
         private void clickOk(object sender, EventArgs e)
@@ -105,19 +119,24 @@ namespace RemoteDebugger
                 {
                     toSend += " " + (int)inFile.ReadByte();
                 }
-                Program.telnetConnection.SendCommand(toSend, LoadResponse);
+                if (!checkAutoStart.Checked)
+                    Program.telnetConnection.SendCommand(toSend, LoadResponse);
+                else
+                    Program.telnetConnection.SendCommand(toSend, NoResponse);
 
                 if (checkAutoStart.Checked && checkAutoBreak.Checked)
                 {
-                    Program.InStepMode = true;
-                    Program.telnetConnection.SendCommand("enter-cpu-step", LoadResponse);
+                    MainForm.myButtonBar.SwapMode(true);
+                    for (int a = 0; a < 10; a++)        // HACK- for some reason immediately after entering step mode,commands get ignored, this hack works around that.
+                    {
+                        Program.telnetConnection.SendCommand("cpu-step", NoResponse);
+                        Program.telnetConnection.SendCommand("set-register pc=" + numAddress.Value.ToString(), NoResponse);
+                    }
                 }
                 if (checkAutoStart.Checked)
                 {
-                    Program.telnetConnection.SendCommand("set-register pc=32768", LoadResponse);
+                    Program.telnetConnection.SendCommand("set-register pc="+numAddress.Value.ToString(), LoadResponse);
                 }
-
-                Close();
             }
             catch
             {

@@ -34,7 +34,7 @@ namespace RemoteDebugger
     public partial class MainForm : Form
     {
         DockPanel dockPanel;
-        ButtonBar myButtonBar;
+        public static ButtonBar myButtonBar;
         LogView myLog;
         Registers myNewRegisters;
         Disassembly myDisassembly;
