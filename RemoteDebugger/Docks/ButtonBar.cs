@@ -125,10 +125,10 @@ namespace RemoteDebugger
 
         private void clickLoadCode(object sender, EventArgs e)
         {
-            LoadThingToAddress(32768, "bin files (*.bin)|*.bin|All files (*.*)|*.*");
-            Program.InStepMode = true;
-            Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
-            Program.telnetConnection.SendCommand("set-register pc=32768", commandResponse);
+            using (LoadCode dialog = new LoadCode())
+            {
+                dialog.ShowDialog();
+            }
         }
     }
 }

@@ -87,6 +87,12 @@
     <Compile Include="Docks\Disassembly.Designer.cs">
       <DependentUpon>Disassembly.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\LoadCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\LoadCode.Designer.cs">
+      <DependentUpon>LoadCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Docks\Disassembly.resx">
       <DependentUpon>Disassembly.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\LoadCode.resx">
+      <DependentUpon>LoadCode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

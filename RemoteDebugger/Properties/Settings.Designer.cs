@@ -46,5 +46,53 @@ namespace RemoteDebugger.Properties {
                 this["remotePort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string loadCodeFileName {
+            get {
+                return ((string)(this["loadCodeFileName"]));
+            }
+            set {
+                this["loadCodeFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32768")]
+        public int loadCodeAddress {
+            get {
+                return ((int)(this["loadCodeAddress"]));
+            }
+            set {
+                this["loadCodeAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool loadCodeAutoBreak {
+            get {
+                return ((bool)(this["loadCodeAutoBreak"]));
+            }
+            set {
+                this["loadCodeAutoBreak"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool loadCodeAutoStart {
+            get {
+                return ((bool)(this["loadCodeAutoStart"]));
+            }
+            set {
+                this["loadCodeAutoStart"] = value;
+            }
+        }
     }
 }
