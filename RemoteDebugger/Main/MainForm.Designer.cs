@@ -35,12 +35,10 @@
             this.newDisassemblyViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newLogViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newScreenViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.proofOfConceptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.version00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
@@ -97,6 +95,21 @@
             this.newScreenViewToolStripMenuItem.Text = "New &Screen View";
             this.newScreenViewToolStripMenuItem.Click += new System.EventHandler(this.newScreenViewToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -107,37 +120,6 @@
             this.timer2.Enabled = true;
             this.timer2.Interval = 500;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.proofOfConceptToolStripMenuItem,
-            this.version00ToolStripMenuItem,
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
-            // 
-            // proofOfConceptToolStripMenuItem
-            // 
-            this.proofOfConceptToolStripMenuItem.Enabled = false;
-            this.proofOfConceptToolStripMenuItem.Name = "proofOfConceptToolStripMenuItem";
-            this.proofOfConceptToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
-            this.proofOfConceptToolStripMenuItem.Text = "Proof Of Concept";
-            // 
-            // version00ToolStripMenuItem
-            // 
-            this.version00ToolStripMenuItem.Enabled = false;
-            this.version00ToolStripMenuItem.Name = "version00ToolStripMenuItem";
-            this.version00ToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
-            this.version00ToolStripMenuItem.Text = "Version 0.0";
-            // 
-            // useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem
-            // 
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem.Enabled = false;
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem.Name = "useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem";
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
-            this.useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem.Text = "Use Latest Source Code Version Of ZEsarUX";
             // 
             // statusStrip1
             // 
@@ -189,11 +171,9 @@
         private System.Windows.Forms.ToolStripMenuItem newScreenViewToolStripMenuItem;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem proofOfConceptToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem version00ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem useLatestSourceCodeVersionOfZEsarUXToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 
