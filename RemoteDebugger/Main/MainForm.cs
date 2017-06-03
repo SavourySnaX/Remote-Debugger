@@ -50,7 +50,7 @@ namespace RemoteDebugger
             this.dockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Controls.Add(this.dockPanel);
 
-            toolStripStatusLabel1.Text = "Please launch ZEsarUX with --enable-remoteprotocol";
+            UpdateStatus();
 
             if (File.Exists("layout.xml"))
             {
@@ -70,7 +70,7 @@ namespace RemoteDebugger
                 myScreen.Show(this.dockPanel, DockState.DockRight);
             }
 
-            Program.t.SendCommand("help", null);
+            Program.telnetConnection.SendCommand("help", null);
             refreshScreen = false;
 
             Invalidate();
@@ -124,7 +124,7 @@ namespace RemoteDebugger
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             dockPanel.SaveAsXml("layout.xml");
-            Program.t.CloseConnection();
+            Program.telnetConnection.CloseConnection();
         }
 
         private void newRegisterViewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -136,19 +136,25 @@ namespace RemoteDebugger
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void UpdateStatus()
         {
-            if (Program.t.connected)
+            if (Program.telnetConnection.connected)
             {
                 toolStripStatusLabel1.Text = "Connected";
             }
             else
             {
-                toolStripStatusLabel1.Text = "Please launch ZEsarUX with --enable-remoteprotocol";
-                return;
+                toolStripStatusLabel1.Text = "Please launch ZEsarUX with --enable-remoteprotocol  (also confirm remote Address and remote Port in settings)";
             }
+        }
 
-            if (Program.t.IsQueueEmpty())
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateStatus();
+            if (!Program.telnetConnection.connected)
+                return;
+
+            if (Program.telnetConnection.IsQueueEmpty())
             {
                 if (myNewRegisters != null)
                 {
@@ -213,6 +219,14 @@ namespace RemoteDebugger
             using (AboutBox box = new AboutBox())
             {
                 box.ShowDialog(this);
+            }
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Settings settings = new Settings())
+            {
+                settings.ShowDialog(this);
             }
         }
     }

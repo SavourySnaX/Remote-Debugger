@@ -92,7 +92,7 @@ namespace RemoteDebugger
 
         public void RequestUpdate()
         {
-            Program.t.SendCommand("get-registers", Callback);
+            Program.telnetConnection.SendCommand("get-registers", Callback);
         }
 
         public string GetRegisterValue(string reg)

@@ -53,7 +53,7 @@ namespace RemoteDebugger
         private void timer1_Tick(object sender, EventArgs e)
         {
             string res;
-            while (Program.t.messages.TryDequeue(out res))
+            while (Program.telnetConnection.messages.TryDequeue(out res))
             {
                 while (res.Length>0)
                 {
@@ -79,7 +79,7 @@ namespace RemoteDebugger
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.t.SendCommand(textBox1.Text,null);
+            Program.telnetConnection.SendCommand(textBox1.Text,null);
             textBox1.Text = "";
         }
     }

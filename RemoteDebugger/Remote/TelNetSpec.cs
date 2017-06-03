@@ -45,11 +45,22 @@ namespace RemoteDebugger
         TcpClient c;
         NetworkStream s;
         public bool connected;
+        string host;
         int port;
 
-        public TelNetSpec(int iport)
+        public void UpdateSettings(string ihost,int iport)
         {
+            if ((host!=ihost || port!=iport)&& connected)
+            {
+                CloseConnection();
+            }
+            host = ihost;
             port = iport;
+        }
+        public TelNetSpec()
+        {
+            port = 0;
+            host = "";
             connected = false;
             messages = new ConcurrentQueue<string>();
             commands = new ConcurrentQueue<Command>();
@@ -67,7 +78,10 @@ namespace RemoteDebugger
             {
                 ImmediateCommand("quit\n");
                 s.Close();
+                s = null;
                 c.Close();
+                c = null;
+                connected = false;
             }
         }
         void ImmediateCommand(string command)
@@ -104,11 +118,14 @@ namespace RemoteDebugger
                     try
                     {
                         Thread.Sleep(1000);
-                        c = new TcpClient("localhost", port);
+                        if (host != "" && port != 0)
+                        {
+                            c = new TcpClient(host, port);
 
-                        s = c.GetStream();
-                        s.ReadTimeout = 50;
-                        connected = true;
+                            s = c.GetStream();
+                            s.ReadTimeout = 50;
+                            connected = true;
+                        }
                     }
                     catch
                     {
@@ -116,8 +133,6 @@ namespace RemoteDebugger
                         {
                             s.Close();
                             s = null;
-                            c.Close();
-                            c = null;
                         }
                         if (c != null)
                         {
@@ -135,7 +150,7 @@ namespace RemoteDebugger
                 }
                 catch (System.ObjectDisposedException)
                 {
-                    break;
+                    continue;
                 }
                 catch (System.IO.IOException)
                 {

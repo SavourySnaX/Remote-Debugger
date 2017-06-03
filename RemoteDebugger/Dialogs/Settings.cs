@@ -24,27 +24,43 @@ SOFTWARE.
 
 */
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using RemoteDebugger.Properties;
-
 namespace RemoteDebugger
 {
-    static class Program
+    public partial class Settings : Form
     {
-        public static TelNetSpec telnetConnection=new TelNetSpec();
-        public static bool InStepMode = false;
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public Settings()
         {
-            telnetConnection.UpdateSettings(Properties.Settings.Default.remoteAddress, Properties.Settings.Default.remotePort);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            InitializeComponent();
+
+            // Load settings
+            remoteAddress.Text = Properties.Settings.Default.remoteAddress;
+            remotePort.Minimum = 1;
+            remotePort.Maximum = 65535;
+            remotePort.Increment = 1;
+            remotePort.Value = Properties.Settings.Default.remotePort;
+        }
+
+        private void clickCancel(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void clickOk(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.remoteAddress = remoteAddress.Text;
+            Properties.Settings.Default.remotePort = (int)remotePort.Value;
+            Properties.Settings.Default.Save();
+            Program.telnetConnection.UpdateSettings(Properties.Settings.Default.remoteAddress, Properties.Settings.Default.remotePort);
+            Close();
         }
     }
 }

@@ -62,7 +62,7 @@ namespace RemoteDebugger
 
         public void RequestUpdate(string address)
         {
-            Program.t.SendCommand("d "+address+" 50", Callback);
+            Program.telnetConnection.SendCommand("d "+address+" 50", Callback);
         }
 
         void UIUpdate(string[] items)

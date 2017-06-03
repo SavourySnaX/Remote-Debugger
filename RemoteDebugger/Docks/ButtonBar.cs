@@ -74,7 +74,7 @@ namespace RemoteDebugger
                             {
                                 toSend += " " + (int)myStream.ReadByte();
                             }
-                            Program.t.SendCommand(toSend, commandResponse);
+                            Program.telnetConnection.SendCommand(toSend, commandResponse);
                             return true;
                         }
                     }
@@ -94,12 +94,12 @@ namespace RemoteDebugger
 
         private void clickStep(object sender, EventArgs e)
         {
-            Program.t.SendCommand("cpu-step", commandResponse);
+            Program.telnetConnection.SendCommand("cpu-step", commandResponse);
         }
 
         private void clickPause(object sender, EventArgs e)
         {
-            Program.t.SendCommand("enter-cpu-step", commandResponse);
+            Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
             Program.InStepMode = true;
         }
 
@@ -114,12 +114,12 @@ namespace RemoteDebugger
 
         private void clickStepOver(object sender, EventArgs e)
         {
-            Program.t.SendCommand("cpu-step-over", commandResponse);
+            Program.telnetConnection.SendCommand("cpu-step-over", commandResponse);
         }
 
         private void clickRun(object sender, EventArgs e)
         {
-            Program.t.SendCommand("exit-cpu-step", commandResponse);
+            Program.telnetConnection.SendCommand("exit-cpu-step", commandResponse);
             Program.InStepMode = false;
         }
 
@@ -127,8 +127,8 @@ namespace RemoteDebugger
         {
             LoadThingToAddress(32768, "bin files (*.bin)|*.bin|All files (*.*)|*.*");
             Program.InStepMode = true;
-            Program.t.SendCommand("enter-cpu-step", commandResponse);
-            Program.t.SendCommand("set-register pc=32768", commandResponse);
+            Program.telnetConnection.SendCommand("enter-cpu-step", commandResponse);
+            Program.telnetConnection.SendCommand("set-register pc=32768", commandResponse);
         }
     }
 }
