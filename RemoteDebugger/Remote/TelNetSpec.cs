@@ -45,6 +45,7 @@ namespace RemoteDebugger
         TcpClient c;
         NetworkStream s;
         public bool connected;
+        public bool remoteIsPaused;
         string host;
         int port;
 
@@ -59,6 +60,7 @@ namespace RemoteDebugger
         }
         public TelNetSpec()
         {
+            remoteIsPaused = false;
             port = 0;
             host = "";
             connected = false;
@@ -109,6 +111,7 @@ namespace RemoteDebugger
         }
         void ReadConsumer()
         {
+            bool readyForCommand = false;
             Command cCom = null;
             string message = "";
             while (true)
@@ -123,7 +126,6 @@ namespace RemoteDebugger
                             c = new TcpClient(host, port);
 
                             s = c.GetStream();
-                            s.ReadTimeout = 50;
                             connected = true;
                         }
                     }
@@ -146,7 +148,32 @@ namespace RemoteDebugger
                 int r = -1;
                 try
                 {
-                    r = s.ReadByte();
+                    if (s.DataAvailable)
+                    {
+                        r = s.ReadByte();
+                    }
+                    else
+                    {
+                        if (readyForCommand && commands.TryDequeue(out cCom))
+                        {
+                            readyForCommand = false;
+                            byte[] b = System.Text.Encoding.ASCII.GetBytes(cCom.command + "\n");
+                            try
+                            {
+                                s.Write(b, 0, b.Length);
+                            }
+                            catch
+                            {
+                                //swallow for now
+                            }
+
+                            if (cCom.responseCB == null)
+                            {
+                                cCom = null;
+                            }
+                        }
+
+                    }
                 }
                 catch (System.NullReferenceException)
                 {
@@ -158,34 +185,6 @@ namespace RemoteDebugger
                 }
                 catch (System.IO.IOException)
                 {
-                    if (cCom==null)
-                    {
-                        // nothing to do
-                    }
-                    else
-                    {
-                        cCom.responseCB(cCom.response.ToArray());
-                        cCom = null;
-                    }
-                    // Ready for next command?
-                    if (commands.TryDequeue(out cCom))
-                    {
-                        byte[] b = System.Text.Encoding.ASCII.GetBytes(cCom.command + "\n");
-                        try
-                        {
-                            s.Write(b, 0, b.Length);
-                        }
-                        catch
-                        {
-                            //swallow for now
-                        }
-                        message = "";
-
-                        if (cCom.responseCB==null)
-                        {
-                            cCom = null;
-                        }
-                    }
                     continue;
                 }
                 if (r != -1)
@@ -206,6 +205,30 @@ namespace RemoteDebugger
                     else
                     {
                         message += System.Text.Encoding.ASCII.GetString(new byte[] { a });
+                        if (message.StartsWith("command> ") || message.StartsWith("command@cpu-step> "))
+                        {
+                            if (message.StartsWith("command@cpu-step>"))
+                            {
+                                remoteIsPaused = true;
+                            }
+                            else
+                            {
+                                remoteIsPaused = false;
+                            }
+                            readyForCommand = true;
+                            // TADA
+                            if (cCom == null)
+                            {
+                                // nothing to do
+                            }
+                            else
+                            {
+                                cCom.responseCB(cCom.response.ToArray());
+                                cCom = null;
+                            }
+                            // Ready for next command?
+                            message = "";
+                        }
                     }
                 }
             }
