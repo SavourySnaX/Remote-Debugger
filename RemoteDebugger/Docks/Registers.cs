@@ -194,7 +194,7 @@ namespace RemoteDebugger
                     string err;
                     if (validateList[e.RowIndex](e.FormattedValue.ToString(), out err))
                     {
-                        Program.telnetConnection.SendCommand("set-register " + regName + "=" + e.FormattedValue.ToString(), null);
+                        Program.telnetConnection.SendCommand("set-register " + regName + "=" + e.FormattedValue.ToString()+"h", null);
                     }
                     dataGridView1.Rows[e.RowIndex].ErrorText = err;
                 }
