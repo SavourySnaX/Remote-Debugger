@@ -52,6 +52,7 @@ namespace RemoteDebugger
     {
         string viewName;
         Bitmap screenImage;
+        Color[] palette = new Color[256];
 
         public SpriteView(string name,string viewname)
         {
@@ -65,6 +66,18 @@ namespace RemoteDebugger
             numPattern.Minimum = 0;
             numPattern.Maximum = 63;
             numPattern.Increment = 1;
+
+            // Create palette (its fixed in spec next I think)
+            for (int a=0;a<256;a++)
+            {
+                byte t = (byte)a;
+
+                int r = (t & 0xE0);
+                int g = (t & 0x1C) << 3;
+                int b = (t & 0x03) << 6;
+
+                palette[a] = Color.FromArgb(r, g, b);
+            }
         }
 
         override protected string GetPersistString()
@@ -81,7 +94,7 @@ namespace RemoteDebugger
         void UIUpdate(string[] items)
         {
             // Turn the stream of hex into a stream of bytes
-            if (items.Count() != 1)
+            if (items.Count() < 1)
                 return;
 
             byte[] t = new byte[16*16];
@@ -98,7 +111,8 @@ namespace RemoteDebugger
                 for (int x = 0; x < 16; x++)
                 {
                     byte palVal = t[x + y * 16];
-                    screenImage.SetPixel(x, y, Color.FromArgb(palVal, palVal, palVal));
+                    Color c = palette[palVal];
+                    screenImage.SetPixel(x, y, c);
                 }
             }
 //            if (updated)
