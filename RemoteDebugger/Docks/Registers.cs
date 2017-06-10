@@ -50,6 +50,7 @@ namespace RemoteDebugger
         {
             viewName = viewname;
             InitializeComponent();
+            dataGridView1.CausesValidation = false;
             registerData = new BindingList<RegisterItem>();
             regexList = new List<Regex>();
             nameMap = new Dictionary<string, int>();
@@ -84,6 +85,7 @@ namespace RemoteDebugger
             dataGridView1.Columns[0].ReadOnly = true;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.RowHeadersVisible = false;
+            dataGridView1.CausesValidation = true;
         }
         override protected string GetPersistString()
         {
@@ -104,6 +106,7 @@ namespace RemoteDebugger
             if (items.Count() != 1)
                 return;
             bool updated = false;
+            dataGridView1.CausesValidation = false;
             for (int r = 0; r < regexList.Count; r++)
             {
                 Match m = regexList[r].Match(items[0]);
@@ -121,7 +124,7 @@ namespace RemoteDebugger
             {
                 dataGridView1.Invalidate(true);
             }
-            
+            dataGridView1.CausesValidation = true;
         }
 
         void Callback(string[] response)
@@ -142,7 +145,22 @@ namespace RemoteDebugger
 
             }
         }
+
+        private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                dataGridView1.Rows[e.RowIndex].ErrorText = "";
+                string regName = dataGridView1.Rows[e.RowIndex].Cells[0].Value as string;
+                string cValue = dataGridView1.Rows[e.RowIndex].Cells[1].Value as string;
+                if (cValue != e.FormattedValue.ToString())
+                {
+                    Program.telnetConnection.SendCommand("set-register " + regName + "=" + e.FormattedValue.ToString(), null);
+                }
+            }
+        }
     }
+
     class RegisterItem
     {
         public string Register { get; set; }
