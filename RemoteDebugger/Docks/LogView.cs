@@ -38,13 +38,21 @@ namespace RemoteDebugger
 {
     public partial class LogView : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        string viewName;
+        static int luid = 0;
+        public string viewName;
         public LogView(string name, string viewname)
         {
-            viewName = viewname;
+            viewName = viewname + ":"+luid++;
             InitializeComponent();
             Text = name;
+            FormClosing += LogView_FormClosing;
         }
+
+        private void LogView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.myLogs.Remove(this);
+        }
+
         override protected string GetPersistString()
         {
             return viewName;

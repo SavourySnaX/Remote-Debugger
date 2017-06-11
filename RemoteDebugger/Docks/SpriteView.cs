@@ -50,13 +50,14 @@ namespace RemoteDebugger
 
     public partial class SpriteView  : WeifenLuo.WinFormsUI.Docking.DockContent
     {
-        string viewName;
+        static int luid = 0;
+        public string viewName;
         Bitmap screenImage;
         Color[] palette = new Color[256];
 
         public SpriteView(string name,string viewname)
         {
-            viewName = viewname;
+            viewName = viewname +":"+luid++;
             InitializeComponent();
 
             screenImage = new Bitmap(16, 16);
@@ -78,6 +79,12 @@ namespace RemoteDebugger
 
                 palette[a] = Color.FromArgb(r, g, b);
             }
+            FormClosing += SpriteView_FormClosing;
+        }
+
+        private void SpriteView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            MainForm.mySpriteViews.Remove(this);
         }
 
         override protected string GetPersistString()

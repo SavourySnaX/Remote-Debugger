@@ -25,6 +25,7 @@ SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -35,17 +36,19 @@ namespace RemoteDebugger
     {
         DockPanel dockPanel;
         public static ButtonBar myButtonBar;
-        LogView myLog;
+        public static List<LogView> myLogs;
         Registers myNewRegisters;
         Disassembly myDisassembly;
         SpectrumScreen myScreen;
         Breakpoint myBreakpoints;
-        SpriteView mySpriteView;
+        public static List<SpriteView> mySpriteViews;
 
         bool refreshScreen;
 
         public MainForm()
         {
+            myLogs = new List<LogView>();
+            mySpriteViews = new List<SpriteView>();
             InitializeComponent();
 
             this.IsMdiContainer = true;
@@ -62,20 +65,20 @@ namespace RemoteDebugger
             else
             {
                 myButtonBar = new ButtonBar("Control");
-                myLog = new LogView("Log", "Log");
+                myLogs.Add(new LogView("Log", "Log"));
                 myNewRegisters = new Registers("Registers", "Registers");
                 myDisassembly = new Disassembly("Disassembly", "Disassembly");
                 myScreen = new SpectrumScreen("Screen", "Screen");
                 myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
-                mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
+                mySpriteViews.Add(new SpriteView("Sprite Patterns", "SpritePatterns"));
 
                 myButtonBar.Show(this.dockPanel, DockState.DockTop);
                 myNewRegisters.Show(this.dockPanel, DockState.DockLeft);
                 myDisassembly.Show(this.dockPanel, DockState.DockRight);
-                myLog.Show(this.dockPanel, DockState.DockBottom);
+                myLogs[0].Show(this.dockPanel, DockState.DockBottom);
                 myBreakpoints.Show(this.dockPanel, DockState.DockLeft);
                 myScreen.Show(this.dockPanel, DockState.DockRight);
-                mySpriteView.Show(this.dockPanel, DockState.Float);
+                mySpriteViews[0].Show(this.dockPanel, DockState.Float);
             }
 
             Program.telnetConnection.SendCommand("help", null);
@@ -86,7 +89,8 @@ namespace RemoteDebugger
 
         public IDockContent DelegateHandler(string name)
         {
-            switch (name)
+            string[] split = name.Split(':');
+            switch (split[0])
             {
                 case "Control":
                     if (myButtonBar==null)
@@ -95,11 +99,16 @@ namespace RemoteDebugger
                     }
                     return myButtonBar;
                 case "Log":
-                    if (myLog==null)
                     {
-                        myLog = new LogView("Log", "Log");
+                        foreach (LogView lv in myLogs)
+                        {
+                            if (lv.viewName == name)
+                                return lv;
+                        }
+                        LogView t = new LogView("Log", "Log");
+                        myLogs.Add(t);
+                        return t;
                     }
-                    return myLog;
                 case "Registers":
                     if (myNewRegisters==null)
                     {
@@ -125,11 +134,16 @@ namespace RemoteDebugger
                     }
                     return myBreakpoints;
                 case "SpritePatterns":
-                    if (mySpriteView == null)
                     {
-                        mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
+                        foreach (SpriteView sv in mySpriteViews)
+                        {
+                            if (sv.viewName == name)
+                                return sv;
+                        }
+                        SpriteView t = new SpriteView("Sprite Patterns", "SpritePatterns");
+                        mySpriteViews.Add(t);
+                        return t;
                     }
-                    return mySpriteView;
                 default:
                     break;
             }
@@ -193,9 +207,9 @@ namespace RemoteDebugger
                     }
                     myDisassembly.RequestUpdate(address);
                 }
-                if (mySpriteView!=null)
+                foreach (SpriteView sv in mySpriteViews)
                 {
-                    mySpriteView.RequestUpdate();
+                    sv.RequestUpdate();
                 }
                 if (myScreen!=null)
                 {
@@ -210,10 +224,11 @@ namespace RemoteDebugger
 
         private void newLogViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (myLog==null)
+            if (myLogs.Count==0)
             {
-                myLog = new LogView("Log", "Log");
-                myLog.Show(dockPanel, DockState.Float);
+                LogView t = new LogView("Log", "Log");
+                myLogs.Add(t);
+                t.Show(dockPanel, DockState.Float);
             }
         }
 
@@ -269,11 +284,9 @@ namespace RemoteDebugger
 
         private void newSpriteViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mySpriteView == null)
-            {
-                mySpriteView = new SpriteView("Sprite Patterns", "SpritePatterns");
-                mySpriteView.Show(dockPanel, DockState.Float);
-            }
+            SpriteView t = new SpriteView("Sprite Patterns", "SpritePatterns");
+            t.Show(dockPanel, DockState.Float);
+            mySpriteViews.Add(t);
         }
     }
 }
