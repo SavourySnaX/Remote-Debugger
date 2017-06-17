@@ -48,16 +48,13 @@ namespace RemoteDebugger
         }
     }
 
-    public partial class SpriteView  : WeifenLuo.WinFormsUI.Docking.DockContent
+    public partial class SpriteView  : BaseDock
     {
-        static int luid = 0;
-        public string viewName;
         Bitmap screenImage;
         Color[] palette = new Color[256];
 
-        public SpriteView(string name,string viewname)
+        public SpriteView(string name,string viewname) : base(viewname)
         {
-            viewName = viewname +":"+luid++;
             InitializeComponent();
 
             screenImage = new Bitmap(16, 16);
@@ -79,12 +76,6 @@ namespace RemoteDebugger
 
                 palette[a] = Color.FromArgb(r, g, b);
             }
-            FormClosing += SpriteView_FormClosing;
-        }
-
-        private void SpriteView_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MainForm.mySpriteViews.Remove(this);
         }
 
         override protected string GetPersistString()
@@ -92,7 +83,7 @@ namespace RemoteDebugger
             return viewName;
         }
 
-        public void RequestUpdate()
+        public override void RequestUpdate()
         {
             int pattern = (int)numPattern.Value;
             Program.telnetConnection.SendCommand("tbblue-get-pattern "+pattern, Callback);

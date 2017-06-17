@@ -41,14 +41,14 @@ namespace RemoteDebugger
         Disassembly myDisassembly;
         SpectrumScreen myScreen;
         Breakpoint myBreakpoints;
-        public static List<SpriteView> mySpriteViews;
+        public static List<BaseDock> myDocks;
 
         bool refreshScreen;
 
         public MainForm()
         {
             myLogs = new List<LogView>();
-            mySpriteViews = new List<SpriteView>();
+            myDocks = new List<BaseDock>();
             InitializeComponent();
 
             this.IsMdiContainer = true;
@@ -70,7 +70,7 @@ namespace RemoteDebugger
                 myDisassembly = new Disassembly("Disassembly", "Disassembly");
                 myScreen = new SpectrumScreen("Screen", "Screen");
                 myBreakpoints = new Breakpoint("Breakpoints", "Breakpoints");
-                mySpriteViews.Add(new SpriteView("Sprite Patterns", "SpritePatterns"));
+                myDocks.Add(new SpriteView("Sprite Patterns", "SpritePatterns"));
 
                 myButtonBar.Show(this.dockPanel, DockState.DockTop);
                 myNewRegisters.Show(this.dockPanel, DockState.DockLeft);
@@ -78,7 +78,7 @@ namespace RemoteDebugger
                 myLogs[0].Show(this.dockPanel, DockState.DockBottom);
                 myBreakpoints.Show(this.dockPanel, DockState.DockLeft);
                 myScreen.Show(this.dockPanel, DockState.DockRight);
-                mySpriteViews[0].Show(this.dockPanel, DockState.Float);
+                myDocks[0].Show(this.dockPanel, DockState.Float);
             }
 
             Program.telnetConnection.SendCommand("help", null);
@@ -135,13 +135,13 @@ namespace RemoteDebugger
                     return myBreakpoints;
                 case "SpritePatterns":
                     {
-                        foreach (SpriteView sv in mySpriteViews)
+                        foreach (BaseDock sv in myDocks)
                         {
                             if (sv.viewName == name)
                                 return sv;
                         }
                         SpriteView t = new SpriteView("Sprite Patterns", "SpritePatterns");
-                        mySpriteViews.Add(t);
+                        myDocks.Add(t);
                         return t;
                     }
                 default:
@@ -207,7 +207,7 @@ namespace RemoteDebugger
                     }
                     myDisassembly.RequestUpdate(address);
                 }
-                foreach (SpriteView sv in mySpriteViews)
+                foreach (BaseDock sv in myDocks)
                 {
                     sv.RequestUpdate();
                 }
@@ -286,7 +286,7 @@ namespace RemoteDebugger
         {
             SpriteView t = new SpriteView("Sprite Patterns", "SpritePatterns");
             t.Show(dockPanel, DockState.Float);
-            mySpriteViews.Add(t);
+            myDocks.Add(t);
         }
     }
 }
